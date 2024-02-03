@@ -155,45 +155,61 @@ class HomeView extends GetView<HomeController> {
                                             ),
                                           ),
                                           const SizedBox(
-                                            width: 30,
+                                            width: 15,
                                           ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                restaurantList["name"],
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17,
+                                          Flexible(
+                                            flex: 2,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  restaurantList["name"],
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 17,
+                                                  ),
                                                 ),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.place,
+                                                      color: Colors.red,
+                                                    ),
+                                                    Text(
+                                                      restaurantList["city"],
+                                                    )
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    Text(
+                                                      restaurantList["rating"]
+                                                          .toString(),
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 5, right: 10),
+                                              alignment: Alignment.topRight,
+                                              child: const Icon(
+                                                Icons.favorite_border_outlined,
+                                                color: Colors.red,
+                                                size: 30,
                                               ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.place,
-                                                    color: Colors.red,
-                                                  ),
-                                                  Text(
-                                                    restaurantList["city"],
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  Text(
-                                                    restaurantList["rating"]
-                                                        .toString(),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
+                                            ),
                                           )
                                         ],
                                       ),

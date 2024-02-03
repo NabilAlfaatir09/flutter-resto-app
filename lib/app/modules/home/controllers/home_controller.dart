@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import "package:http/http.dart" as http;
 
 class HomeController extends GetxController {
-  final String baseUrl = "https://restaurant-api.dicoding.dev";
+  static const baseUrl = "https://restaurant-api.dicoding.dev";
   static const smallImageUrl = '/images/small/';
   static const mediumImageUrl = '/images/medium/';
   static const largeImageUrl = '/images/large/';

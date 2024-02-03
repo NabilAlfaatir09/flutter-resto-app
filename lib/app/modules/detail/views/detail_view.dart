@@ -72,17 +72,32 @@ class DetailView extends GetView<DetailController> {
                     children: [
                       Column(
                         children: [
-                          Image.network(
-                            controller.mediumImage(
-                              detailRestaurant[0]["pictureId"],
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return const CircularProgressIndicator();
-                              }
-                            },
+                          Stack(
+                            children: [
+                              Image.network(
+                                controller.mediumImage(
+                                  detailRestaurant[0]["pictureId"],
+                                ),
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return const CircularProgressIndicator();
+                                  }
+                                },
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(top: 5, right: 10),
+                                alignment: Alignment.topRight,
+                                child: const Icon(
+                                  Icons.favorite_border_outlined,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 20,

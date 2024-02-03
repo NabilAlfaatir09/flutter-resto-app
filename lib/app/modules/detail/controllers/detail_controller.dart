@@ -10,7 +10,6 @@ import "package:http/http.dart" as http;
 import 'package:restaurant_app2/app/modules/home/controllers/home_controller.dart';
 
 class DetailController extends GetxController {
-  final String baseUrl = "https://restaurant-api.dicoding.dev";
   var dataDetailRestaurant = [].obs;
   var isLoading = true.obs;
   var connectionType = 0.obs;
@@ -20,7 +19,7 @@ class DetailController extends GetxController {
   Future<void> fetchDetailRestaurant(String id) async {
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/detail/$id"),
+        Uri.parse("${HomeController.baseUrl}/detail/$id"),
       );
       if (response.statusCode == 200) {
         var convertDataToJson = jsonDecode(response.body);
@@ -74,12 +73,14 @@ class DetailController extends GetxController {
   }
 
   mediumImage(pictureId) {
-    String urlImage = '$baseUrl${HomeController.mediumImageUrl}$pictureId';
+    String urlImage =
+        '${HomeController.baseUrl}${HomeController.mediumImageUrl}$pictureId';
     return urlImage;
   }
 
   largeImage(pictureId) {
-    String urlImage = '$baseUrl${HomeController.largeImageUrl}$pictureId';
+    String urlImage =
+        '${HomeController.baseUrl}${HomeController.largeImageUrl}$pictureId';
     return urlImage;
   }
 
