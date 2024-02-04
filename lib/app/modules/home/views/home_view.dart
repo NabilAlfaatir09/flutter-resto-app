@@ -121,9 +121,18 @@ class HomeView extends GetView<HomeController> {
                                 var restaurantList =
                                     controller.dataListRestaurant[index];
                                 return InkWell(
+                                  splashColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () {
-                                    Navigator.pushNamed(context, Routes.DETAIL,
-                                        arguments: restaurantList["id"]);
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.DETAIL,
+                                      arguments: {
+                                        "id": restaurantList['id'],
+                                        "data": restaurantList,
+                                      },
+                                    );
                                   },
                                   child: Card(
                                     child: Container(
@@ -202,12 +211,45 @@ class HomeView extends GetView<HomeController> {
                                             flex: 1,
                                             child: Container(
                                               margin: const EdgeInsets.only(
-                                                  top: 5, right: 10),
+                                                top: 5,
+                                                right: 10,
+                                              ),
                                               alignment: Alignment.topRight,
-                                              child: const Icon(
-                                                Icons.favorite_border_outlined,
-                                                color: Colors.red,
-                                                size: 30,
+                                              child: InkWell(
+                                                splashColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () {
+                                                  bool isFavorite = controller
+                                                      .favoriteRestaurants
+                                                      .any((restaurant) =>
+                                                          restaurant["id"] ==
+                                                          restaurantList["id"]);
+                                                  if (isFavorite) {
+                                                    controller
+                                                        .removeFromFavorites(
+                                                            restaurantList[
+                                                                "id"]);
+                                                  } else {
+                                                    controller.addToFavorites(
+                                                        restaurantList);
+                                                  }
+                                                },
+                                                child: Obx(() => Icon(
+                                                      controller
+                                                              .favoriteRestaurants
+                                                              .any((restaurant) =>
+                                                                  restaurant[
+                                                                      "id"] ==
+                                                                  restaurantList[
+                                                                      "id"])
+                                                          ? Icons.favorite
+                                                          : Icons
+                                                              .favorite_border_outlined,
+                                                      color: Colors.red,
+                                                      size: 30,
+                                                    )),
                                               ),
                                             ),
                                           )

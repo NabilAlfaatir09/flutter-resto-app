@@ -54,13 +54,13 @@ class DetailController extends GetxController {
       case ConnectivityResult.wifi:
         connectionType.value = 1;
         if (dataDetailRestaurant.isEmpty) {
-          await fetchDetailRestaurant(Get.arguments);
+          await fetchDetailRestaurant(Get.arguments["id"]);
         }
         break;
       case ConnectivityResult.mobile:
         connectionType.value = 2;
         if (dataDetailRestaurant.isEmpty) {
-          await fetchDetailRestaurant(Get.arguments);
+          await fetchDetailRestaurant(Get.arguments["id"]);
         }
         break;
       case ConnectivityResult.none:
@@ -89,7 +89,7 @@ class DetailController extends GetxController {
     await getConnectivityType();
     streamSubscription = connectivity.onConnectivityChanged.listen(updateState);
     if (connectionType.value != 0) {
-      await fetchDetailRestaurant(Get.arguments);
+      await fetchDetailRestaurant(Get.arguments["id"]);
     }
     super.onInit();
   }

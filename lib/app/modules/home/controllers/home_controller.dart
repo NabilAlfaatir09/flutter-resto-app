@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import "package:http/http.dart" as http;
 
+import '../../../data/databese_helper.dart';
+
 class HomeController extends GetxController {
   static const baseUrl = "https://restaurant-api.dicoding.dev";
   static const smallImageUrl = '/images/small/';
@@ -17,6 +19,8 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   //0 = No Internet, 1 = WIFI Connected ,2 = Mobile Data Connected.
   var connectionType = 0.obs;
+  RxList<Map<String, dynamic>> favoriteRestaurants =
+      <Map<String, dynamic>>[].obs;
   late StreamSubscription streamSubscription;
   final Connectivity connectivity = Connectivity();
   TextEditingController searchController = TextEditingController();
@@ -102,13 +106,33 @@ class HomeController extends GetxController {
     return urlImage;
   }
 
+  // ignore: prefer_final_fields
+  DatabaseHelper _databaseHelper = DatabaseHelper();
+
+  void addToFavorites(Map<String, dynamic> restaurant) async {
+    await _databaseHelper.insertFavoriteRestaurant(restaurant);
+    getFavoriteRestaurants();
+  }
+
+  void removeFromFavorites(String id) async {
+    await _databaseHelper.deleteFavoriteRestaurant(id);
+    getFavoriteRestaurants();
+  }
+
+  void getFavoriteRestaurants() async {
+    var favorites = await _databaseHelper.getFavoriteRestaurants();
+    favoriteRestaurants.value = favorites;
+  }
+
   @override
   void onInit() async {
     await getConnectivityType();
     streamSubscription = connectivity.onConnectivityChanged.listen(updateState);
     if (connectionType.value != 0) {
       await fetchRestaurantList();
+      getFavoriteRestaurants();
     }
+
     super.onInit();
   }
 

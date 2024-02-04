@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:restaurant_app2/app/modules/home/controllers/home_controller.dart';
 import '../controllers/detail_controller.dart';
 
 class DetailView extends GetView<DetailController> {
   const DetailView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    dynamic argument = Get.arguments;
+    final homeControll = Get.find<HomeController>();
     final List detailRestaurant = controller.dataDetailRestaurant;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Restaurant'),
@@ -91,10 +95,38 @@ class DetailView extends GetView<DetailController> {
                                 margin:
                                     const EdgeInsets.only(top: 5, right: 10),
                                 alignment: Alignment.topRight,
-                                child: const Icon(
-                                  Icons.favorite_border_outlined,
-                                  color: Colors.red,
-                                  size: 40,
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () {
+                                    bool isFavorite =
+                                        homeControll.favoriteRestaurants.any(
+                                      (restaurant) =>
+                                          restaurant["id"] == argument["id"],
+                                    );
+                                    if (isFavorite) {
+                                      homeControll.removeFromFavorites(
+                                        argument["id"],
+                                      );
+                                    } else {
+                                      homeControll.addToFavorites(
+                                        argument["data"],
+                                      );
+                                    }
+                                  },
+                                  child: Obx(
+                                    () => Icon(
+                                      homeControll.favoriteRestaurants.any(
+                                        (restaurant) =>
+                                            restaurant["id"] == argument["id"],
+                                      )
+                                          ? Icons.favorite
+                                          : Icons.favorite_border_outlined,
+                                      color: Colors.red,
+                                      size: 40,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
