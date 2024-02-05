@@ -22,7 +22,7 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
