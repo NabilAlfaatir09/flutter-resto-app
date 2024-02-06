@@ -236,20 +236,22 @@ class HomeView extends GetView<HomeController> {
                                                         restaurantList);
                                                   }
                                                 },
-                                                child: Obx(() => Icon(
-                                                      controller
-                                                              .favoriteRestaurants
-                                                              .any((restaurant) =>
-                                                                  restaurant[
-                                                                      "id"] ==
-                                                                  restaurantList[
-                                                                      "id"])
-                                                          ? Icons.favorite
-                                                          : Icons
-                                                              .favorite_border_outlined,
-                                                      color: Colors.red,
-                                                      size: 30,
-                                                    )),
+                                                child: Obx(
+                                                  () => Icon(
+                                                    controller
+                                                            .favoriteRestaurants
+                                                            .any((restaurant) =>
+                                                                restaurant[
+                                                                    "id"] ==
+                                                                restaurantList[
+                                                                    "id"])
+                                                        ? Icons.favorite
+                                                        : Icons
+                                                            .favorite_border_outlined,
+                                                    color: Colors.red,
+                                                    size: 30,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           )

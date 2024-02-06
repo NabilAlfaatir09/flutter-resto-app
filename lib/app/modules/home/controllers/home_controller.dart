@@ -122,6 +122,7 @@ class HomeController extends GetxController {
   void getFavoriteRestaurants() async {
     var favorites = await _databaseHelper.getFavoriteRestaurants();
     favoriteRestaurants.value = favorites;
+    isLoading.value = false;
   }
 
   @override
