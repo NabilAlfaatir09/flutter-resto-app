@@ -83,10 +83,18 @@ class FavoritView extends GetView<FavoritController> {
                           ),
                         )
                       : (homeC.favoriteRestaurants.isEmpty)
-                          ? const Center(
-                              child: Text(
-                                "Favorite Restaurant tidak ada, tambahkan favorite untuk menampilkan data favorite restaurant disini",
-                              ),
+                          ? Column(
+                              children: [
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Lottie.asset("assets/datanotfound.json"),
+                                const Center(
+                                  child: Text(
+                                    "Belum ada favorite, tambahkan favorite restaurant",
+                                  ),
+                                ),
+                              ],
                             )
                           : ListView.separated(
                               shrinkWrap: true,

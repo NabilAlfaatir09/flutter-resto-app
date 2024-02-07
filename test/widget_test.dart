@@ -1,30 +1,43 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_app2/app/modules/home/controllers/home_controller.dart';
+import 'package:restaurant_app2/app/modules/home/views/home_view.dart';
 
-import 'package:restaurant_app2/main.dart';
-
+Widget createHomeScreen() => GetMaterialApp(
+      home: GetBuilder<HomeController>(
+        init: HomeController(),
+        builder: (controller) => const HomeView(),
+      ),
+    );
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  setUpAll(() {
+    Get.testMode = true;
+  });
+  testWidgets('Testing semua', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(createHomeScreen());
+    expect(find.byType(ListView), findsOneWidget);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that AppBar title is displayed correctly.
+    expect(find.text('Restaurant App'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify that search TextField is displayed correctly.
+    expect(find.byType(TextField), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that CircularProgressIndicator is not shown initially.
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+
+    // Verify that ListView is displayed.
+    expect(find.byType(ListView), findsOneWidget);
+
+    // Verify that all items in dataListRestaurant are displayed correctly.
+    final HomeController controller = Get.find<HomeController>();
+    final dataListRestaurant = controller.dataListRestaurant;
+    for (var restaurant in dataListRestaurant) {
+      expect(find.text(restaurant['name']), findsOneWidget);
+      expect(find.text(restaurant['city']), findsOneWidget);
+      expect(find.text(restaurant['rating'].toString()), findsOneWidget);
+    }
   });
 }

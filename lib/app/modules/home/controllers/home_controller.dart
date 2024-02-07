@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import "package:http/http.dart" as http;
-
 import '../../../data/databese_helper.dart';
 
 class HomeController extends GetxController {
@@ -16,6 +15,7 @@ class HomeController extends GetxController {
   static const mediumImageUrl = '/images/medium/';
   static const largeImageUrl = '/images/large/';
   var dataListRestaurant = [].obs;
+  RxList<dynamic> get dataList => dataListRestaurant;
   var isLoading = true.obs;
   //0 = No Internet, 1 = WIFI Connected ,2 = Mobile Data Connected.
   var connectionType = 0.obs;
@@ -127,8 +127,8 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    await getConnectivityType();
     streamSubscription = connectivity.onConnectivityChanged.listen(updateState);
+    await getConnectivityType();
     if (connectionType.value != 0) {
       await fetchRestaurantList();
       getFavoriteRestaurants();
@@ -140,5 +140,6 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     streamSubscription.cancel();
+    super.onClose();
   }
 }
