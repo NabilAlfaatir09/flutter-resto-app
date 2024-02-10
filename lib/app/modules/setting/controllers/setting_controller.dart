@@ -26,7 +26,7 @@ class SettingController extends GetxController {
         const Duration(hours: 24),
         1,
         BackgroundService.callback,
-        startAt: DateTimeHelper.format(),
+        startAt: DateTimeHelper.nextScheduledDateTime().value,
         exact: true,
         wakeup: true,
       );

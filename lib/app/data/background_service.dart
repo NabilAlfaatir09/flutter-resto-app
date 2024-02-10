@@ -1,14 +1,18 @@
-// ignore_for_file: avoid_print
-
 import 'dart:isolate';
 import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_app2/app/data/notification_helper.dart';
+import 'package:restaurant_app2/app/modules/home/controllers/home_controller.dart';
 
-final ReceivePort port = ReceivePort();
+// ignore: unnecessary_late
+late Rx<ReceivePort> port = ReceivePort().obs;
 
-class BackgroundService {
+class BackgroundService extends GetxService {
   static BackgroundService? _instance;
   static const String _isolateName = 'isolate';
-  static SendPort? _uiSendPort;
+  static final Rx<SendPort?> _uiSendPort = Rx<SendPort?>(null);
 
   BackgroundService._internal() {
     _instance = this;
@@ -18,18 +22,26 @@ class BackgroundService {
 
   void initializeIsolate() {
     IsolateNameServer.registerPortWithName(
-      port.sendPort,
+      port.value.sendPort,
       _isolateName,
     );
   }
 
   static Future<void> callback() async {
-    print('Alarm fired!');
-    _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);
-    _uiSendPort?.send(null);
+    final NotificationHelper notificationHelper = NotificationHelper();
+    try {
+      var result = await HomeController().fetchRestaurantList();
+      await notificationHelper.showNotification(
+          FlutterLocalNotificationsPlugin(), result);
+
+      _uiSendPort.value ??= IsolateNameServer.lookupPortByName(_isolateName);
+      _uiSendPort.value?.send(null);
+    } catch (e) {
+      debugPrint('Error in background service: $e');
+    }
   }
 
   Future<void> someTask() async {
-    print('Updated data from the background isolate');
+    debugPrint('Updated data from the background isolate');
   }
 }

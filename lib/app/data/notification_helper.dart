@@ -4,11 +4,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_app2/app/modules/home/controllers/home_controller.dart';
 import 'package:restaurant_app2/app/routes/app_pages.dart';
-import 'package:rxdart/rxdart.dart';
 
-final selectNotificationSubject = BehaviorSubject<String>();
-
-class NotificationHelper {
+class NotificationHelper extends GetxController {
+  final RxString selectNotificationSubject = ''.obs;
   final homeC = Get.put(HomeController());
   static NotificationHelper? _instance;
 
@@ -21,7 +19,7 @@ class NotificationHelper {
   Future<void> initNotifications(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var initializationSettingsAndroid =
-        const AndroidInitializationSettings('icon');
+        const AndroidInitializationSettings('mipmap/ic_launcher');
 
     var initializationSettingsIOS = const DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -35,17 +33,20 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (NotificationResponse details) async {
       final payload = details.payload;
-      if (payload != null) {}
-      selectNotificationSubject.add(payload ?? 'empty payload');
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+      }
+      selectNotificationSubject.value = payload ?? "Empty payload";
     });
   }
 
   Future<void> showNotification(
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+    List<dynamic> restaurant,
   ) async {
     var channelId = "1";
-    var channelName = "Restaurant_1";
-    var channelDescription = "Recommendation restaurant for you";
+    var channelName = "channel_1";
+    var channelDescription = "Restaurant_channel";
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       channelId,
@@ -63,20 +64,15 @@ class NotificationHelper {
       iOS: iOSPlatformChannelSpecifics,
     );
 
-    var shuffledRestaurants = List.from(homeC.dataList)..shuffle();
+    var shuffledRestaurants = List.from(homeC.dataListRestaurant)..shuffle();
 
     if (shuffledRestaurants.isNotEmpty) {
       var randomRestaurant = shuffledRestaurants.first;
-      var header = "<b> ${randomRestaurant.name} </b>";
+      var header = "<b> ${randomRestaurant["name"]} </b>";
       var body = "Recommendation Restaurant For You";
 
-      await flutterLocalNotificationsPlugin.show(
-        0,
-        header,
-        body,
-        platformChannelSpecifics,
-        payload: json.encode(randomRestaurant.toJson()),
-      );
+      await flutterLocalNotificationsPlugin
+          .show(0, header, body, platformChannelSpecifics, payload: "payload");
     }
   }
 
@@ -86,15 +82,15 @@ class NotificationHelper {
     selectNotificationSubject.stream.listen(
       (String payload) {
         var convertDataToJson = jsonDecode(payload);
-        homeC.dataList.value = convertDataToJson["restaurant"];
-        var data = homeC.dataList;
+        homeC.dataListRestaurant.value = convertDataToJson["restaurants"];
+        var data = homeC.dataListRestaurant;
         var restaurant = data;
         Navigator.pushNamed(
           context,
           Routes.DETAIL,
           arguments: {
             "id": restaurant[0]['id'],
-            "data": restaurant,
+            "data": restaurant[0],
           },
         );
       },

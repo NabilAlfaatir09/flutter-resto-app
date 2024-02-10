@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_app2/app/data/background_service.dart';
-import 'package:restaurant_app2/app/data/notification.dart';
+import 'package:restaurant_app2/app/data/notification_helper.dart';
 import 'app/routes/app_pages.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

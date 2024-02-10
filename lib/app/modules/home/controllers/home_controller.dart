@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class HomeController extends GetxController {
   static const mediumImageUrl = '/images/medium/';
   static const largeImageUrl = '/images/large/';
   var dataListRestaurant = [].obs;
-  RxList<dynamic> get dataList => dataListRestaurant;
   var isLoading = true.obs;
   //0 = No Internet, 1 = WIFI Connected ,2 = Mobile Data Connected.
   var connectionType = 0.obs;
@@ -25,22 +23,18 @@ class HomeController extends GetxController {
   final Connectivity connectivity = Connectivity();
   TextEditingController searchController = TextEditingController();
 
-  Future<void> fetchRestaurantList() async {
+  Future<List<dynamic>> fetchRestaurantList() async {
     try {
       var response = await http.get(
         Uri.parse("$baseUrl/list"),
       );
       if (response.statusCode == 200) {
-        var convertDataToJson = jsonDecode(response.body);
-        dataListRestaurant.value = convertDataToJson["restaurants"];
         isLoading.value = false;
+        var convertDataToJson = jsonDecode(response.body);
+        return dataListRestaurant.value = convertDataToJson["restaurants"];
       } else {
         throw Exception("Failed to load list data Restaurant");
       }
-    } on SocketException {
-      throw "Jaringan tidak ada. Cek Koneksi Kamu";
-    } on FormatException {
-      throw "Error";
     } catch (_) {
       rethrow;
     }
@@ -57,10 +51,6 @@ class HomeController extends GetxController {
       } else {
         throw Exception("Failed to search list data Restaurant");
       }
-    } on SocketException {
-      throw "Jaringan tidak ada. Cek Koneksi Kamu";
-    } on FormatException {
-      throw "Error";
     } catch (_) {
       rethrow;
     }
