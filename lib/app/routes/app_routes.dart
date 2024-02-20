@@ -10,6 +10,7 @@ abstract class Routes {
   static const BOTTOM_BAR = _Paths.BOTTOM_BAR;
   static const FAVORIT = _Paths.FAVORIT;
   static const SETTING = _Paths.SETTING;
+  static const SPLASH = _Paths.SPLASH;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const BOTTOM_BAR = '/bottom-bar';
   static const FAVORIT = '/favorit';
   static const SETTING = '/setting';
+  static const SPLASH = '/splash';
 }
